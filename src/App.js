@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -42,13 +42,18 @@ const App = () => {
 
 			const jwtToken = response.data.token;
 			const userData = response.data.userData;
+			// console.log(userData);
 			const userObject = {
-				...userData,
+				userData: {
+					...userData,
+				},
 				jwtToken: jwtToken,
 			};
 			localStorage.setItem("loginData", JSON.stringify(userObject));
 			setAccessToken(jwtToken);
-			setUserData(userData);
+			setUserData({
+				...userData,
+			});
 		} catch (err) {
 			console.log(err);
 		}
@@ -59,17 +64,20 @@ const App = () => {
 	};
 
 	// Verifying that accessToken is not faulty
-	if (accessToken) {
+	useEffect(() => {
 		verifyAccessToken({
 			Authorization: `Bearer ${accessToken}`,
 		})
 			.then((result) => {
-				console.log(result);
 				if (result.status !== 200) {
 					setAccessToken(null);
 					setUserData(null);
 				} else {
-					setUserData(result.data.usersData);
+					setUserData((prevState) => {
+						return {
+							...result.data.userData,
+						};
+					});
 				}
 			})
 			.catch((err) => {
@@ -77,7 +85,9 @@ const App = () => {
 				setAccessToken(null);
 				setUserData(null);
 			});
-	}
+	}, [accessToken]);
+
+	console.log("Running");
 
 	return (
 		<Box>
@@ -96,7 +106,9 @@ const App = () => {
 								top: 0,
 								zIndex: 50,
 							}}
-						></Box>
+						>
+							<ResponsiveAppBar profileImage={userData.imageUrl} />
+						</Box>
 						<Routes>
 							<Route path="/" element={<HomeScreen />} />
 							<Route path="/profile" element={<DashboardScreen />} />
