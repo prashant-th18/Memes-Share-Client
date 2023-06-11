@@ -110,7 +110,15 @@ const App = () => {
 							<ResponsiveAppBar profileImage={userData.imageUrl} />
 						</Box>
 						<Routes>
-							<Route path="/" element={<HomeScreen />} />
+							<Route
+								path="/"
+								element={
+									<HomeScreen
+										accessToken={accessToken}
+										profileImage={userData.imageUrl}
+									/>
+								}
+							/>
 							<Route path="/profile" element={<DashboardScreen />} />
 							<Route path="/post/create" element={<CreatePostScreen />} />
 							<Route path="/post/comment" element={<SinglePostScreen />} />

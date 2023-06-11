@@ -8,3 +8,7 @@ export const googleLogin = async (data) => {
 export const verifyAccessToken = async (header) => {
 	return await commonRequest("GET", `${BASE_URL}/auth/verify`, "", header);
 };
+
+export const getAllPosts = async (header) => {
+	return await commonRequest("GET", `${BASE_URL}/posts`, "", header);
+};
