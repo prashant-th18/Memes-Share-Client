@@ -1,17 +1,34 @@
 import "./App.css";
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
+
 import { googleLogin, verifyAccessToken } from "./services/apis";
+import HomeScreen from "./Screens/HomeScreen";
+import SinglePostScreen from "./Screens/SinglePostScreen";
+import DashboardScreen from "./Screens/DashboardScreen";
+import CreatePostScreen from "./Screens/CreatePostScreen";
+import NoMediaComment from "./Components/NoMediaComment";
+import ResponsiveAppBar from "./Components/Navbar/ResponsiveAppBar";
 
 const App = () => {
 	// Storing the jwt token in 'accessToken' state
 	const [accessToken, setAccessToken] = useState(
-		localStorage.getItem("jwtToken")
-			? JSON.parse(localStorage.getItem("jwtToken"))
+		localStorage.getItem("loginData")
+			? JSON.parse(localStorage.getItem("loginData"))
+				? JSON.parse(localStorage.getItem("loginData")).jwtToken
+				: null
+			: null
+	);
+
+	const [userData, setUserData] = useState(
+		localStorage.getItem("loginData")
+			? JSON.parse(localStorage.getItem("loginData"))
+				? JSON.parse(localStorage.getItem("loginData")).userData
+				: null
 			: null
 	);
 
@@ -23,9 +40,15 @@ const App = () => {
 				token: googleData.credential,
 			});
 
-			const token = response.data.token;
-			localStorage.setItem("jwtToken", JSON.stringify(token));
-			setAccessToken(token);
+			const jwtToken = response.data.token;
+			const userData = response.data.userData;
+			const userObject = {
+				...userData,
+				jwtToken: jwtToken,
+			};
+			localStorage.setItem("loginData", JSON.stringify(userObject));
+			setAccessToken(jwtToken);
+			setUserData(userData);
 		} catch (err) {
 			console.log(err);
 		}
@@ -39,24 +62,50 @@ const App = () => {
 	if (accessToken) {
 		verifyAccessToken({
 			Authorization: `Bearer ${accessToken}`,
-			"Content-Type": "application/json",
 		})
 			.then((result) => {
 				console.log(result);
 				if (result.status !== 200) {
 					setAccessToken(null);
+					setUserData(null);
+				} else {
+					setUserData(result.data.usersData);
 				}
 			})
 			.catch((err) => {
 				console.log(err);
 				setAccessToken(null);
+				setUserData(null);
 			});
 	}
 
 	return (
 		<Box>
 			{accessToken ? (
-				<h1>Op</h1>
+				<BrowserRouter>
+					<Box
+						sx={{
+							backgroundColor: "#1c1f20",
+							minHeight: "100vh",
+						}}
+					>
+						<Box
+							component="header"
+							sx={{
+								position: "sticky",
+								top: 0,
+								zIndex: 50,
+							}}
+						></Box>
+						<Routes>
+							<Route path="/" element={<HomeScreen />} />
+							<Route path="/profile" element={<DashboardScreen />} />
+							<Route path="/post/create" element={<CreatePostScreen />} />
+							<Route path="/post/comment" element={<SinglePostScreen />} />
+							<Route path="/post/comment/:id" element={<NoMediaComment />} />
+						</Routes>
+					</Box>
+				</BrowserRouter>
 			) : (
 				<Box
 					sx={{
