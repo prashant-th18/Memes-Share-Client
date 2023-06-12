@@ -38,7 +38,7 @@ const Profile = (props) => {
 			setPosts([...posts.data.posts]);
 		};
 		fetchUserPosts();
-	}, [accessToken, props.id]);
+	}, []);
 
 	console.log(user);
 
