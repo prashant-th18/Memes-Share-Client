@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { getAllPosts } from "../services/apis";
 import { Box } from "@mui/material";
 import CreatePost from "../Components/CreatePost";
@@ -12,17 +11,18 @@ import { token } from "../Components/Context/ContextProvider";
 const HomeScreen = (props) => {
 	const { accessToken, setAccessToken } = useContext(token);
 
-	const navigate = useNavigate();
-
 	// State to get all posts
 	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
 		const fun = async () => {
 			try {
-				const data = await getAllPosts({
-					Authorization: `Bearer ${accessToken}`,
-				});
+				const data = await getAllPosts(
+					{
+						Authorization: `Bearer ${accessToken}`,
+					},
+					""
+				);
 				console.log(data);
 				setPosts(data.data.posts);
 			} catch (err) {
@@ -52,15 +52,18 @@ const HomeScreen = (props) => {
 	return (
 		<Box component="body">
 			<CreatePost profileImage={props.profileImage} />
-			{posts.reverse().map((post) => {
-				return (
-					<NoMediaPost
-						key={post._id}
-						post={post}
-						handleDeleteClick={handleDeleteClick}
-					/>
-				);
-			})}
+			{posts
+				.slice(0)
+				.reverse()
+				.map((post) => {
+					return (
+						<NoMediaPost
+							key={post._id}
+							post={post}
+							handleDeleteClick={handleDeleteClick}
+						/>
+					);
+				})}
 		</Box>
 	);
 };

@@ -8,7 +8,6 @@ import { Typography } from "@mui/material";
 
 import { googleLogin, verifyAccessToken } from "./services/apis";
 import HomeScreen from "./Screens/HomeScreen";
-import SinglePostScreen from "./Screens/SinglePostScreen";
 import DashboardScreen from "./Screens/DashboardScreen";
 import CreatePostScreen from "./Screens/CreatePostScreen";
 import NoMediaComment from "./Components/NoMediaComment";
@@ -106,9 +105,9 @@ const App = () => {
 									/>
 								}
 							/>
-							<Route path="/profile" element={<DashboardScreen />} />
+							<Route path="/profile/:id" element={<DashboardScreen />} />
 							<Route path="/post/create" element={<CreatePostScreen />} />
-							<Route path="/post/comment" element={<SinglePostScreen />} />
+							{/* <Route path="/post/comment" element={<SinglePostScreen />} /> */}
 							<Route path="/post/comments/:id" element={<NoMediaComment />} />
 						</Routes>
 					</Box>

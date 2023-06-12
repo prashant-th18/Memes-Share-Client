@@ -15,7 +15,7 @@ import {
 	Typography,
 } from "@mui/material";
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 import { data, token } from "../Components/Context/ContextProvider";
 import { upVotePost, downVotePost } from "../services/apis";
@@ -60,9 +60,26 @@ const NoMediaPost = (props) => {
 	// navigation
 	const navigate = useNavigate();
 
+	const params = {
+		userImage: props.post.userImage,
+		userName: props.post.userName,
+		userId: props.post.user,
+	};
+
 	const handleCommentClick = (e) => {
 		const id = props.post._id;
-		navigate(`/post/comments/${id}`);
+		navigate({
+			pathname: `/post/comments/${id}`,
+			search: `?${createSearchParams(params)}`,
+		});
+	};
+
+	const profileClickHandler = (e) => {
+		// console.log("Ok");
+		e.stopPropagation();
+		const id = props.post.user;
+		console.log(id);
+		navigate(`/profile/${id}`);
 	};
 
 	return (
@@ -75,12 +92,13 @@ const NoMediaPost = (props) => {
 					border: "15px",
 					backgroundColor: "#e6ebe7",
 				}}
-				onClick={() => console.log("Card Clicked!")}
+				onClick={handleCommentClick}
 			>
 				<CardActionArea sx={{ padding: "5px", borderRadius: "5px" }}>
 					<CardContent>
 						<Box variant="div">
 							<Avatar
+								onClick={profileClickHandler}
 								sx={{
 									bgcolor: "deepOrange[500]",
 									display: "inline-block",
@@ -110,8 +128,9 @@ const NoMediaPost = (props) => {
 							<CardMedia
 								component="img"
 								image={props.post.image}
-								// height="400"
-								// maxHeight="400"
+								sx={{
+									maxHeight: "400",
+								}}
 								alt="this is a image"
 							/>
 						) : (

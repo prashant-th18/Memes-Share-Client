@@ -9,8 +9,13 @@ export const verifyAccessToken = async (header) => {
 	return await commonRequest("GET", `${BASE_URL}/auth/verify`, "", header);
 };
 
-export const getAllPosts = async (header) => {
-	return await commonRequest("GET", `${BASE_URL}/posts`, "", header);
+export const getAllPosts = async (header, userId) => {
+	return await commonRequest(
+		"GET",
+		`${BASE_URL}/posts?id=${userId}`,
+		"",
+		header
+	);
 };
 
 export const uploadImage = async (url, data, header) => {
@@ -46,4 +51,21 @@ export const deletePost = async (id, header) => {
 		"",
 		header
 	);
+};
+
+export const getPost = async (id, header) => {
+	return await commonRequest("GET", `${BASE_URL}/posts/post/${id}`, "", header);
+};
+
+export const postComments = async (id, header, data) => {
+	return await commonRequest(
+		"POST",
+		`${BASE_URL}/posts/comment/${id}`,
+		data,
+		header
+	);
+};
+
+export const getUserData = async (id, header) => {
+	return await commonRequest("GET", `${BASE_URL}/user/${id}`, "", header);
 };

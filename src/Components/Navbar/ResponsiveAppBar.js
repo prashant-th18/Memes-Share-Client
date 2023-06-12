@@ -8,11 +8,15 @@ import {
 	Tooltip,
 	Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../services/helper";
 
+import { data } from "../Context/ContextProvider";
+
 const ResponsiveAppBar = (props) => {
+	const { userData, setUserData } = useContext(data);
+
 	const navigate = useNavigate();
 
 	// AppBar Logo Click Handler
@@ -21,7 +25,9 @@ const ResponsiveAppBar = (props) => {
 	};
 
 	const navigateToProfile = (e) => {
-		navigate("/profile");
+		const id = userData._id;
+		console.log(id);
+		navigate(`/profile/${id}`);
 	};
 
 	const logoImgSource = `${BASE_URL}/images/logo.png`;
