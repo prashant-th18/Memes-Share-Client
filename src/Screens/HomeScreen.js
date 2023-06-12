@@ -16,7 +16,7 @@ const HomeScreen = (props) => {
 				Authorization: `Bearer ${props.accessToken}`,
 			});
 			console.log(data);
-			setPosts(data.posts);
+			setPosts(data.data.posts);
 		};
 		fun();
 	}, [props.accessToken]);

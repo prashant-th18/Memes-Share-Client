@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -14,23 +14,12 @@ import CreatePostScreen from "./Screens/CreatePostScreen";
 import NoMediaComment from "./Components/NoMediaComment";
 import ResponsiveAppBar from "./Components/Navbar/ResponsiveAppBar";
 
+import { data, token } from "./Components/Context/ContextProvider";
+
 const App = () => {
 	// Storing the jwt token in 'accessToken' state
-	const [accessToken, setAccessToken] = useState(
-		localStorage.getItem("loginData")
-			? JSON.parse(localStorage.getItem("loginData"))
-				? JSON.parse(localStorage.getItem("loginData")).jwtToken
-				: null
-			: null
-	);
-
-	const [userData, setUserData] = useState(
-		localStorage.getItem("loginData")
-			? JSON.parse(localStorage.getItem("loginData"))
-				? JSON.parse(localStorage.getItem("loginData")).userData
-				: null
-			: null
-	);
+	const { userData, setUserData } = useContext(data);
+	const { accessToken, setAccessToken } = useContext(token);
 
 	// Google Login Handler
 	const handleLogin = async (googleData) => {
