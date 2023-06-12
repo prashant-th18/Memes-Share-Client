@@ -20,3 +20,30 @@ export const uploadImage = async (url, data, header) => {
 export const uploadPost = async (data, header) => {
 	return await commonRequest("POST", `${BASE_URL}/posts/create`, data, header);
 };
+
+export const upVotePost = async (id, header) => {
+	return await commonRequest(
+		"POST",
+		`${BASE_URL}/posts/upvote/${id}`,
+		"",
+		header
+	);
+};
+
+export const downVotePost = async (id, header) => {
+	return await commonRequest(
+		"POST",
+		`${BASE_URL}/posts/downvote/${id}`,
+		"",
+		header
+	);
+};
+
+export const deletePost = async (id, header) => {
+	return await commonRequest(
+		"DELETE",
+		`${BASE_URL}/posts/delete/${id}`,
+		"",
+		header
+	);
+};

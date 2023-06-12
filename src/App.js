@@ -74,9 +74,7 @@ const App = () => {
 				setAccessToken(null);
 				setUserData(null);
 			});
-	}, [accessToken]);
-
-	console.log("Running");
+	}, [accessToken, setAccessToken, setUserData]);
 
 	return (
 		<Box>
@@ -111,7 +109,7 @@ const App = () => {
 							<Route path="/profile" element={<DashboardScreen />} />
 							<Route path="/post/create" element={<CreatePostScreen />} />
 							<Route path="/post/comment" element={<SinglePostScreen />} />
-							<Route path="/post/comment/:id" element={<NoMediaComment />} />
+							<Route path="/post/comments/:id" element={<NoMediaComment />} />
 						</Routes>
 					</Box>
 				</BrowserRouter>

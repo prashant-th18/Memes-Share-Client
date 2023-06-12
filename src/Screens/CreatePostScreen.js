@@ -102,11 +102,7 @@ const CreatePostScreen = () => {
 				}}
 			>
 				<h2>Create Post</h2>
-				<Divider
-					sx={{
-						backgroundColor: "white",
-					}}
-				/>
+				<Divider sx={{ backgroundColor: "white" }} />
 				<Container
 					sx={{
 						border: "15px",
