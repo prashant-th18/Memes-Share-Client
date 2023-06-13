@@ -1,10 +1,13 @@
 import { Avatar, Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import { data, token } from "./Context/ContextProvider";
 
 const CreatePost = (props) => {
+	const { userData, setUserData } = useContext(data);
+
 	const navigate = useNavigate();
 
 	const boxClickHandler = (e) => {
@@ -13,7 +16,7 @@ const CreatePost = (props) => {
 
 	const profileClickHandler = (e) => {
 		e.stopPropagation();
-		navigate("/profile");
+		navigate(`/profile/${userData._id}`);
 	};
 
 	return (
